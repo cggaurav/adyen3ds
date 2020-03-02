@@ -43,12 +43,25 @@ function handleOnAdditionalDetails(state, component) {
    makePaymentDetails(state.data)
        .then(response => {
            if (response.action) {
-               // console.log("We have an action object from makePaymentDetails", response)
-               checkout.createFromAction(response.action).mount('#card-component-container');
+              // console.log("We have an action object from makePaymentDetails", response)
+              checkout.createFromAction(response.action).mount('#card-component-container');
            } else {
-               // console.log("We DON'T have an action object from makePaymentDetails", response)
-               updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
-               updateStateContainer(response)
+
+              if (response.resultCode === 'AuthenticationFinished') {
+                  console.log('AuthenticationFinished', state.data)
+                  makePaymentDetails({
+                      ...state.data,
+                      ...{threeDSAuthenticationOnly: false}
+                  })
+                  .then((newResponse) => {
+                      updatePaymentStatusContainer([newResponse.resultCode, newResponse.pspReference].join(' '))
+                      updateStateContainer(newResponse)
+                  })
+              } else {
+                  updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
+                  updateStateContainer(response)
+              }
+              
            }
        })
        .catch((console.error))
@@ -76,7 +89,11 @@ getOriginKey().then(originKey => {
         checkout = new AdyenCheckout(configuration);
 
         // https://docs.adyen.com/payment-methods/cards/web-component
-        card = checkout.create("card").mount("#card-component-container");
+        card = checkout.create("card", {
+          // hasHolderName: true,
+          // holderNameRequired: true,
+          // billingAddressRequired: true
+        }).mount("#card-component-container");
 
         // https://docs.adyen.com/payment-methods/sepa-direct-debit/web-component
         sepa = checkout.create("sepadirectdebit").mount("#sepa-component-container");

@@ -6,7 +6,12 @@ getOriginKey().then(originKey => {
             environment: 'test',
             originKey: originKey, // Mandatory. originKey from Costumer Area
             paymentMethodsResponse,
-            removePaymentMethods: ['paysafecard', 'c_cash']
+            removePaymentMethods: ['paysafecard', 'c_cash'],
+            paymentMethodsConfiguration: {
+                hasHolderName: true,
+                holderNameRequired: true,
+                billingAddressRequired: true
+            }
         });
 
         // 2. Create and mount the Component
@@ -36,10 +41,10 @@ getOriginKey().then(originKey => {
                     makePayment(state.data)
                         .then(response => {
                             if (response.action) {
-                                // console.log("We have an action object from makePayment", response)
+                                console.log("We have an action object from makePayment", response)
                                 dropin.handleAction(response.action)
                             } else {
-                                // console.log("We DON'T have an action object from makePayment", response)
+                                console.log("We DON'T have an action object from makePayment", response)
                                 updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
                                 updateStateContainer(response)
                             }
@@ -48,17 +53,30 @@ getOriginKey().then(originKey => {
                 },
                 onAdditionalDetails: (state, component) => {
                     
-                    // console.log('makePaymentDetails', state.data)
+                    console.log('makePaymentDetails', state.data)
 
                     makePaymentDetails(state.data)
                         .then(response => {
                             if (response.action) {
-                                // console.log("We have an action object from makePaymentDetails", response)
+                                console.log("We have an action object from makePaymentDetails", response)
                                 dropin.handleAction(response.action)
                             } else {
-                                // console.log("We DON'T have an action object from makePaymentDetails", response)
-                                updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
-                                updateStateContainer(response)
+                                console.log("We DON'T have an action object from makePaymentDetails", response)
+                                if (response.resultCode === 'AuthenticationFinished') {
+                                    console.log('AuthenticationFinished', state.data)
+                                    makePaymentDetails({
+                                        ...state.data,
+                                        ...{threeDSAuthenticationOnly: false}
+                                    })
+                                    .then((newResponse) => {
+                                        updatePaymentMethodContainer([newResponse.resultCode, newResponse.pspReference].join(' '))
+                                        updateStateContainer(newResponse)
+                                    })
+                                } else {
+                                    updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
+                                    updateStateContainer(response)
+                                }
+                                
                             }
                         })
                         .catch((console.error))
