@@ -17,16 +17,16 @@ function handleOnChange(state, component) {
     state.data.returnUrl = state.data.returnUrl = 'https://adyen101.herokuapp.com/component/'
     // state.data.threeDSAuthenticationOnly = true
 
-    console.log('makePayment', state.data)
+    // console.log('makePayment', state.data)
 
     makePayment(state.data)
         .then(response => {
             if (response.action && (response.action.type === 'threeDS2Fingerprint' || response.action.type === 'threeDS2Challenge')) {
-                console.log("We have an action object from makePayment", response)
+                // console.log("We have an action object from makePayment", response)
                 // https://docs.adyen.com/checkout/3d-secure/native-3ds2/web-component
                 checkout.createFromAction(response.action).mount('#card-component-container');
             } else {
-                console.log("We DON'T have an action object from makePayment", response)
+                // console.log("We DON'T have an action object from makePayment", response)
                 updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
                 updateStateContainer(response)
             }
@@ -38,15 +38,15 @@ function handleOnChange(state, component) {
 function handleOnAdditionalDetails(state, component) {
    // state.data // Provides the data that you need to pass in the `/payments/details` call.
    // component // Provides the active component instance that called this event.
-   console.log('makePaymentDetails', state.data)
+   // console.log('makePaymentDetails', state.data)
 
    makePaymentDetails(state.data)
        .then(response => {
            if (response.action) {
-               console.log("We have an action object from makePaymentDetails", response)
+               // console.log("We have an action object from makePaymentDetails", response)
                checkout.createFromAction(response.action).mount('#card-component-container');
            } else {
-               console.log("We DON'T have an action object from makePaymentDetails", response)
+               // console.log("We DON'T have an action object from makePaymentDetails", response)
                updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
                updateStateContainer(response)
            }

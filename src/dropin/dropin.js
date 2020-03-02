@@ -36,10 +36,10 @@ getOriginKey().then(originKey => {
                     makePayment(state.data)
                         .then(response => {
                             if (response.action) {
-                                console.log("We have an action object from makePayment", response)
+                                // console.log("We have an action object from makePayment", response)
                                 dropin.handleAction(response.action)
                             } else {
-                                console.log("We DON'T have an action object from makePayment", response)
+                                // console.log("We DON'T have an action object from makePayment", response)
                                 updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
                                 updateStateContainer(response)
                             }
@@ -48,15 +48,15 @@ getOriginKey().then(originKey => {
                 },
                 onAdditionalDetails: (state, component) => {
                     
-                    console.log('makePaymentDetails', state.data)
+                    // console.log('makePaymentDetails', state.data)
 
                     makePaymentDetails(state.data)
                         .then(response => {
                             if (response.action) {
-                                console.log("We have an action object from makePaymentDetails", response)
+                                // console.log("We have an action object from makePaymentDetails", response)
                                 dropin.handleAction(response.action)
                             } else {
-                                console.log("We DON'T have an action object from makePaymentDetails", response)
+                                // console.log("We DON'T have an action object from makePaymentDetails", response)
                                 updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
                                 updateStateContainer(response)
                             }
