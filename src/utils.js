@@ -73,7 +73,6 @@ const getOriginKey = () =>
         .then(response => {
             if (response.error || !response.originKeys) throw 'No originKey available';
 
-            console.log('originKeys', response.originKeys)
             return response.originKeys[Object.keys(response.originKeys)[0]];
 
         })
