@@ -6,9 +6,8 @@ const paymentsDefaultConfig = {
     reference: 'Checkout Components sample code test',
     countryCode: 'DE',
     channel: 'Web',
-    // threeDSAuthenticationOnly: true,
-    // merchantAccount: 'SupportRecruitementCOM',
-    returnUrl: 'https://your-company.com/',
+    threeDSAuthenticationOnly: true,
+    merchantAccount: 'SupportRecruitementCOM',
     amount: {
         value: 1000,
         currency: 'EUR'

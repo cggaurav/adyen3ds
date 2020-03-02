@@ -14,7 +14,7 @@ function handleOnChange(state, component) {
     state.data.additionalData.allow3DS2 = true
     state.data.channel = 'Web'
     state.data.origin = window.location.origin
-    state.data.returnUrl = 'https://your-company.com/checkout/'
+    state.data.returnUrl = state.data.returnUrl = 'https://adyen101.herokuapp.com/component/'
     // state.data.threeDSAuthenticationOnly = true
 
     console.log('makePayment', state.data)
@@ -38,8 +38,6 @@ function handleOnChange(state, component) {
 function handleOnAdditionalDetails(state, component) {
    // state.data // Provides the data that you need to pass in the `/payments/details` call.
    // component // Provides the active component instance that called this event.
-
-
    console.log('makePaymentDetails', state.data)
 
    makePaymentDetails(state.data)

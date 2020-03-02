@@ -28,7 +28,7 @@ getOriginKey().then(originKey => {
                     state.data.additionalData.allow3DS2 = true
                     state.data.channel = 'Web'
                     state.data.origin = window.location.origin
-                    state.data.returnUrl = 'https://your-company.com/checkout/'
+                    state.data.returnUrl = 'https://adyen101.herokuapp.com/dropin/'
                     // state.data.threeDSAuthenticationOnly = true
 
                     console.log('makePayment', state.data)
