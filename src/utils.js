@@ -31,8 +31,6 @@ const getPaymentMethods = () =>
         .then(response => {
             if (response.error) throw 'No paymentMethods available';
 
-            console.log('Payment Method response', response)
-
             return response;
         })
         .catch(console.error);
@@ -47,7 +45,6 @@ const makePayment = (paymentMethod, config = {}) => {
 
     return httpPost('payments', paymentRequest)
         .then(response => {
-            // console.log('payments call response', response)
             if (response.error) throw 'Payment initiation failed';
 
             updateResponseContainer(response);
@@ -61,7 +58,6 @@ const makePaymentDetails = (paymentAction, config = {}) => {
 
     return httpPost('payments/details', paymentAction)
         .then(response => {
-            // console.log('payments details response', response)
             if (response.error) throw 'Payment details failed';
 
             updateResponseContainer(response);
@@ -77,6 +73,8 @@ const getOriginKey = () =>
         .then(response => {
             if (response.error || !response.originKeys) throw 'No originKey available';
 
+            console.log('originKeys', response.originKeys)
             return response.originKeys[Object.keys(response.originKeys)[0]];
+
         })
         .catch(console.error);
