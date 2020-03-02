@@ -1,4 +1,6 @@
 const stateContainer = document.querySelector('.current-state');
+const paymentMethodContainer = document.querySelector('.payment-methods');
+const paymentStatusContainer = document.querySelector('.payment-status');
 const requestContainer = document.querySelector('.request-container');
 const responseContainer = document.querySelector('.response-container');
 
@@ -7,9 +9,17 @@ function updateStateContainer(newState) {
     stateContainer.innerText = JSON.stringify(newState, null, 2);
 }
 
+function updatePaymentMethodContainer(newState) {
+    paymentMethodContainer.innerText = JSON.stringify(newState, null, 2);
+}
+
+function updatePaymentStatusContainer(newState) {
+    paymentStatusContainer.innerText = JSON.stringify(newState, null, 2);
+}
+
 // Demo - Update request container
 function updateRequestContainer(response) {
-    const defaultResponseParams = { merchantAccount: 'YOUR_MERCHANT_ACCOUNT' };
+    const defaultResponseParams = { merchantAccount: 'SupportRecruitementCOM' };
     requestContainer.querySelector('pre').innerText = JSON.stringify(
         { ...defaultResponseParams, ...response },
         null,

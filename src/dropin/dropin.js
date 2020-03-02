@@ -22,7 +22,46 @@ getOriginKey().then(originKey => {
                 onSubmit: (state, component) => {
                     // state.data;
                     // state.isValid;
-                    makePayment(state.data);
+
+                    // Lets focus on the 3DS2 flow
+                    state.data.additionalData = state.data.additionalData || {}
+                    state.data.additionalData.allow3DS2 = true
+                    state.data.channel = 'Web'
+                    state.data.origin = window.location.origin
+                    state.data.returnUrl = 'https://your-company.com/checkout/'
+                    // state.data.threeDSAuthenticationOnly = true
+
+                    console.log('makePayment', state.data)
+
+                    makePayment(state.data)
+                        .then(response => {
+                            if (response.action) {
+                                console.log("We have an action object from makePayment", response)
+                                dropin.handleAction(response.action)
+                            } else {
+                                console.log("We DON'T have an action object from makePayment", response)
+                                updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
+                                updateStateContainer(response)
+                            }
+                        })
+                        .catch((console.error))
+                },
+                onAdditionalDetails: (state, component) => {
+                    
+                    console.log('makePaymentDetails', state.data)
+
+                    makePaymentDetails(state.data)
+                        .then(response => {
+                            if (response.action) {
+                                console.log("We have an action object from makePaymentDetails", response)
+                                dropin.handleAction(response.action)
+                            } else {
+                                console.log("We DON'T have an action object from makePaymentDetails", response)
+                                updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
+                                updateStateContainer(response)
+                            }
+                        })
+                        .catch((console.error))
                 }
             })
             .mount('#dropin-container');

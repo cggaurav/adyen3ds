@@ -1,35 +1,18 @@
-const paymentMethodsConfig = {
-    shopperReference: 'Checkout Components sample code test',
-    reference: 'Checkout Components sample code test',
-    countryCode: 'NL',
-    amount: {
-        value: 1000,
-        currency: 'EUR'
-    }
-};
+// Hint: You should be able to see alternative payment methods if you use the following combination of currency and country code in the paymentMethods request:
+// { "countryCode":"DE", "amount":{ "currency":"EUR", "value":1000 } }
 
 const paymentsDefaultConfig = {
     shopperReference: 'Checkout Components sample code test',
     reference: 'Checkout Components sample code test',
-    countryCode: 'NL',
+    countryCode: 'DE',
     channel: 'Web',
+    // threeDSAuthenticationOnly: true,
+    // merchantAccount: 'SupportRecruitementCOM',
     returnUrl: 'https://your-company.com/',
     amount: {
         value: 1000,
         currency: 'EUR'
-    },
-    lineItems: [
-        {
-            id: '1',
-            description: 'Test Item 1',
-            amountExcludingTax: 10000,
-            amountIncludingTax: 11800,
-            taxAmount: 1800,
-            taxPercentage: 1800,
-            quantity: 1,
-            taxCategory: 'High'
-        }
-    ]
+    }
 };
 
 // Generic POST Helper
@@ -45,13 +28,16 @@ const httpPost = (endpoint, data) =>
 
 // Get all available payment methods from the local server
 const getPaymentMethods = () =>
-    httpPost('paymentMethods', paymentMethodsConfig)
+    httpPost('paymentMethods', paymentsDefaultConfig)
         .then(response => {
             if (response.error) throw 'No paymentMethods available';
+
+            console.log('Payment Method response', response)
 
             return response;
         })
         .catch(console.error);
+
 
 // Posts a new payment into the local server
 const makePayment = (paymentMethod, config = {}) => {
@@ -62,7 +48,22 @@ const makePayment = (paymentMethod, config = {}) => {
 
     return httpPost('payments', paymentRequest)
         .then(response => {
+            // console.log('payments call response', response)
             if (response.error) throw 'Payment initiation failed';
+
+            updateResponseContainer(response);
+
+            return response;
+        })
+        .catch(console.error);
+};
+
+const makePaymentDetails = (paymentAction, config = {}) => {
+
+    return httpPost('payments/details', paymentAction)
+        .then(response => {
+            // console.log('payments details response', response)
+            if (response.error) throw 'Payment details failed';
 
             updateResponseContainer(response);
 
