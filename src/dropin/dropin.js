@@ -53,29 +53,21 @@ getOriginKey().then(originKey => {
                 },
                 onAdditionalDetails: (state, component) => {
                     
-                    console.log('makePaymentDetails', state.data)
+                    const paymentDetailsPayload = {
+                        details: state.data.details,
+                        paymentData: state.data.paymentData
+                    }
+                    console.log('makePaymentDetails', paymentDetailsPayload)
 
-                    makePaymentDetails(state.data)
+                    makePaymentDetails(paymentDetailsPayload)
                         .then(response => {
                             if (response.action) {
                                 console.log("We have an action object from makePaymentDetails", response)
                                 dropin.handleAction(response.action)
                             } else {
                                 console.log("We DON'T have an action object from makePaymentDetails", response)
-                                if (response.resultCode === 'AuthenticationFinished') {
-                                    console.log('AuthenticationFinished', state.data)
-                                    makePaymentDetails({
-                                        ...state.data,
-                                        ...{threeDSAuthenticationOnly: false}
-                                    })
-                                    .then((newResponse) => {
-                                        updatePaymentMethodContainer([newResponse.resultCode, newResponse.pspReference].join(' '))
-                                        updateStateContainer(newResponse)
-                                    })
-                                } else {
-                                    updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
-                                    updateStateContainer(response)
-                                }
+                                updatePaymentMethodContainer([response.resultCode, response.pspReference].join(' '))
+                                updateStateContainer(response)
                                 
                             }
                         })

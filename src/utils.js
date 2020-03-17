@@ -2,11 +2,11 @@
 // { "countryCode":"DE", "amount":{ "currency":"EUR", "value":1000 } }
 
 const paymentsDefaultConfig = {
-    shopperReference: 'Checkout Components sample code test',
+    // shopperReference: 'Checkout Components sample code test',
     reference: 'Checkout Components sample code test',
     countryCode: 'DE',
     channel: 'Web',
-    threeDSAuthenticationOnly: true,
+    // threeDSAuthenticationOnly: true,
     merchantAccount: 'SupportRecruitementCOM',
     amount: {
         value: 1000,

@@ -38,29 +38,21 @@ function handleOnChange(state, component) {
 function handleOnAdditionalDetails(state, component) {
    // state.data // Provides the data that you need to pass in the `/payments/details` call.
    // component // Provides the active component instance that called this event.
-   // console.log('makePaymentDetails', state.data)
+   const paymentDetailsPayload = {
+       details: state.data.details,
+       paymentData: state.data.paymentData
+   }
+   console.log('makePaymentDetails', paymentDetailsPayload)
 
-   makePaymentDetails(state.data)
+   makePaymentDetails(paymentDetailsPayload)
        .then(response => {
            if (response.action) {
               // console.log("We have an action object from makePaymentDetails", response)
               checkout.createFromAction(response.action).mount('#card-component-container');
            } else {
 
-              if (response.resultCode === 'AuthenticationFinished') {
-                  console.log('AuthenticationFinished', state.data)
-                  makePaymentDetails({
-                      ...state.data,
-                      ...{threeDSAuthenticationOnly: false}
-                  })
-                  .then((newResponse) => {
-                      updatePaymentStatusContainer([newResponse.resultCode, newResponse.pspReference].join(' '))
-                      updateStateContainer(newResponse)
-                  })
-              } else {
-                  updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
-                  updateStateContainer(response)
-              }
+              updatePaymentStatusContainer([response.resultCode, response.pspReference].join(' '))
+              updateStateContainer(response)
               
            }
        })
