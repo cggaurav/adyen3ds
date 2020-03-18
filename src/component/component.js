@@ -17,7 +17,7 @@ function handleOnChange(state, component) {
     state.data.returnUrl = state.data.returnUrl = 'https://adyen101.herokuapp.com/component/'
     // state.data.threeDSAuthenticationOnly = true
 
-    // console.log('makePayment', state.data)
+    console.log('makePayment', state.data)
 
     makePayment(state.data)
         .then(response => {
