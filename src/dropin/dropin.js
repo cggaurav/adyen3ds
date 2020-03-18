@@ -7,11 +7,11 @@ getOriginKey().then(originKey => {
             originKey: originKey, // Mandatory. originKey from Costumer Area
             paymentMethodsResponse,
             removePaymentMethods: ['paysafecard', 'c_cash'],
-            paymentMethodsConfiguration: {
-                hasHolderName: true,
-                holderNameRequired: true,
-                billingAddressRequired: true
-            }
+            // paymentMethodsConfiguration: {
+            //     hasHolderName: true,
+            //     holderNameRequired: true,
+            //     billingAddressRequired: true
+            // }
         });
 
         // 2. Create and mount the Component
@@ -57,6 +57,7 @@ getOriginKey().then(originKey => {
                         details: state.data.details,
                         paymentData: state.data.paymentData
                     }
+
                     console.log('makePaymentDetails', paymentDetailsPayload)
 
                     makePaymentDetails(paymentDetailsPayload)
